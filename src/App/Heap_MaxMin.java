@@ -5,7 +5,6 @@ public class Heap_MaxMin {
 
     public Heap_MaxMin(double[] heap){
         this.heap = heap;
-
     }
 
     /**
@@ -14,6 +13,10 @@ public class Heap_MaxMin {
      * @param index we want to heapify
      */
     public void HEAPIFY(int index){
+        //validate the index
+        if (index < 0 || index > heap.length-1)
+            return;
+
         // Calculate the depth of the node using floor(log2(index + 1))
         int depth = (int) (Math.floor(Math.log(index + 1) / Math.log(2)));
         System.out.println(">> heapify index:" + index + " at depth:" + depth);
@@ -98,7 +101,6 @@ public class Heap_MaxMin {
         }//end of depth odd
     }//end of Heapify
 
-
     /**
      * build heap
      */
@@ -126,21 +128,45 @@ public class Heap_MaxMin {
     }
 
     public void HEAP_INSERT(double key){
+        System.out.println(">>> Insert " + key);
         double heapForBuild[] = new double[heap.length+1];
         for (int i =0; i < heap.length; i++) {
             heapForBuild[i] = heap[i];
         }
         heapForBuild[heapForBuild.length-1] = key;
         heap = heapForBuild;
-        swap(0,heap.length-1);
-        HEAPIFY(0);
 
-        System.out.println("printing the new heap");
+        //heapify up
+        int index = heap.length-1;
+        while (index >= 0) {
+            //heapify up
+            index = getParent(index);
+            HEAPIFY(index);
+        }
+        System.out.print("New heap: ");
         printHeap();
     }
+    public void HEAP_DELETE(int indexToDelete){
+        System.out.println(">>> delete " + indexToDelete);
+        // Search for the index of the value in the heap
+        for (int i = 0; i < heap.length; i++) {
+            if (i == indexToDelete) {
+                indexToDelete = i;
+                break;
+            }
+        }
 
-    private void HEAP_DELETE(double[] A, int i){
-
+        // Replace the value with the last element in the heap
+        heap[indexToDelete] = heap[heap.length - 1];
+        double heapForBuild[] = new double[heap.length-1];
+        for (int i =0; i < heap.length -1; i++)
+            heapForBuild[i] = heap[i];
+        heap = heapForBuild;
+        System.out.print("Heap after delete: ");
+        printHeap();
+        HEAPIFY(indexToDelete);
+        System.out.print("Fixed heap: ");
+        printHeap();
     }
 
     /**Left-Son method*/
@@ -154,7 +180,6 @@ public class Heap_MaxMin {
         return 2*index+1;
     }
 
-
     /**Right-Son method*/
     private boolean hasRightSon(int index){
         return (2*index+2 < this.heap.length);
@@ -166,11 +191,18 @@ public class Heap_MaxMin {
         return 2*index+2;
     }
 
+    private int getParent(int index){
+        int parent = (index - 1) / 2;
+        if (parent >= 0 && parent < heap.length)
+            return parent;
+        return -1;
+    }
+
     /**
      * this method return the largest grandson of the given index
      * if there isn't any index fit for that, return -1
      */
-    public int checkGrandSons(int index, boolean max){
+    private int checkGrandSons(int index, boolean max){
         int Left_LeftSon = getLeftSonIndex(getLeftSonIndex(index));
         int Right_LeftSon = getRightSonIndex(getLeftSonIndex(index));
         int Left_RightSon = getLeftSonIndex(getRightSonIndex(index));
@@ -229,7 +261,7 @@ public class Heap_MaxMin {
         }
         else System.out.println("Pls provide a valid heap");
 
-//
+//printing with the indexes
 //            //printing the heap we got from the file
 //            System.out.print("HEAP: ");
 //            System.out.print("[");

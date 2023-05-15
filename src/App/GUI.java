@@ -48,10 +48,6 @@ public class GUI extends JFrame {
         // Create the "Build heap" button
         JButton build_heap_Button = new JButton("Build Heap");
 
-        // Create the heapify button
-        JButton heapify_Button = new JButton("Heapify");
-        heapify_Button.setEnabled(false);
-
         // Create "extract_max" button
         JButton heap_extract_max_Button = new JButton("Heap extract max");
         heap_extract_max_Button.setEnabled(false);
@@ -75,11 +71,6 @@ public class GUI extends JFrame {
         JPanel row1Panel = new JPanel();
         row1Panel.setLayout(new FlowLayout());
         row1Panel.add(build_heap_Button);
-
-        // Create a panel for the button "heapify_Button"
-        JPanel row2Panel = new JPanel();
-        row2Panel.setLayout(new FlowLayout());
-        row2Panel.add(heapify_Button);
 
         // Create a panel for the "extract_max_Button"
         JPanel row3Panel = new JPanel();
@@ -112,6 +103,14 @@ public class GUI extends JFrame {
         radioPanel.add(radio_file);
         radioPanel.add(radio_type);
         radioPanel.setMaximumSize(new Dimension(200, 35));
+
+        // Create a panel for the "heap_delete_Button"
+        JButton heap_print_Button = new JButton("Print heap");
+        heap_print_Button.setEnabled(false);
+        JPanel row2Panel = new JPanel();
+        row2Panel.setLayout(new FlowLayout());
+        row2Panel.add(heap_print_Button);
+
 
         // Add the row panels to RTC_Panel
         Heap_Panel.add(row1Panel);
@@ -150,7 +149,8 @@ public class GUI extends JFrame {
                     heap_extract_max_Button.setEnabled(true);
                     heap_extract_min_Button.setEnabled(true);
                     heap_insert_Button.setEnabled(true);
-                    heapify_Button.setEnabled(true);
+                    heap_print_Button.setEnabled(true);
+                    build_heap_Button.setEnabled(true);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -184,8 +184,8 @@ public class GUI extends JFrame {
                 heap_extract_max_Button.setEnabled(true);
                 heap_extract_min_Button.setEnabled(true);
                 heap_insert_Button.setEnabled(true);
-                heapify_Button.setEnabled(true);
-
+                heap_print_Button.setEnabled(true);
+                build_heap_Button.setEnabled(true);
             }
         });
 
@@ -193,7 +193,16 @@ public class GUI extends JFrame {
         heap_delete_Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                String insertValue = String.valueOf(Integer.parseInt(
+                        JOptionPane.showInputDialog(Heap_Panel, "Enter your index for delete:")));
+                int indexToDelete = -1;
+                if (insertValue.trim().matches("^(0|[1-9]\\d*)$")){
+                     indexToDelete = Integer.parseInt(insertValue.trim());
+                 }
+                if (indexToDelete >= 0 && indexToDelete < heap.heap.length) {
+                    heap.HEAP_DELETE(Integer.parseInt(insertValue));
+                }
+                else System.out.println("Invalid Value, pleas provide valid one");;
             }
         });
 
@@ -222,9 +231,10 @@ public class GUI extends JFrame {
             }
         });
 
-        heapify_Button.addActionListener(new ActionListener() {
+        heap_print_Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                heap.printHeap();
             }
         });
 
