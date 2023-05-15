@@ -53,9 +53,9 @@ public class GenericMethods {
 
             while ((lineSeparator = br.readLine()) != null && lines<1) {
                 String heapS[] = lineSeparator.split(", ");
-                int index = 0;
-                heap = new double[heapS.length + 2];
 
+                int index = 0;
+                heap = new double[heapS.length];
                 for (String s : heapS) {
                     //validate each value in the split string with regular expression
                     if (s.trim().matches("^-?\\d+(\\.\\d+)?$")) {

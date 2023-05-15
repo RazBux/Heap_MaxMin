@@ -5,6 +5,7 @@ public class Heap_MaxMin {
 
     public Heap_MaxMin(double[] heap){
         this.heap = heap;
+
     }
 
     /**
@@ -106,18 +107,36 @@ public class Heap_MaxMin {
         for (int i = heap.length/2; i >= 0  ; i--) {
             HEAPIFY(i);
         }
+        printHeap();
     }
 
     public double HEAP_EXTRACT_MAX(){
+        System.out.println("Max Value: " + heap[0]);
         return heap[0];
     }
 
-    private void HEAP_EXTRACT_MIN(double[] A){
-
+    public double HEAP_EXTRACT_MIN(){
+        double minVlaue = heap[0];
+        if (heap.length >= 3)
+            minVlaue = heap[1] > heap[2] ? heap[2] : heap[1];
+        else if (heap.length == 2 )
+            minVlaue = heap[1];
+        System.out.println("Min Value: " + minVlaue);
+        return minVlaue;
     }
 
-    private void HEAP_INSERT(double[] A, int key){
+    public void HEAP_INSERT(double key){
+        double heapForBuild[] = new double[heap.length+1];
+        for (int i =0; i < heap.length; i++) {
+            heapForBuild[i] = heap[i];
+        }
+        heapForBuild[heapForBuild.length-1] = key;
+        heap = heapForBuild;
+        swap(0,heap.length-1);
+        HEAPIFY(0);
 
+        System.out.println("printing the new heap");
+        printHeap();
     }
 
     private void HEAP_DELETE(double[] A, int i){
