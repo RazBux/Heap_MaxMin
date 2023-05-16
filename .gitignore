@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 out/
-.idea
+.idea/
+*.iml
 
 # Package Files #
 *.jar
