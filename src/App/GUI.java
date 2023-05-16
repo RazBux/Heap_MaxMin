@@ -3,8 +3,6 @@ package App;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.lang.management.MonitorInfo;
-import java.text.ParseException;
 import javax.swing.*;
 
 import static java.awt.BorderLayout.CENTER;
@@ -12,10 +10,6 @@ import static java.awt.BorderLayout.CENTER;
 
 public class GUI extends JFrame {
     static Heap_MaxMin heap;
-
-    public static void main(String[] args) throws IOException {
-        new GUI();
-    }
 
     private JPanel contentPane;
     private JToolBar toolBar;
@@ -125,7 +119,6 @@ public class GUI extends JFrame {
         /**Heap panel END*/
 
 
-
         /////////////////////////////button method part///////////////////////////////
         build_heap_Button.addActionListener(new ActionListener() {
             @Override
@@ -163,11 +156,8 @@ public class GUI extends JFrame {
                 radio_file.setEnabled(false);
                 radio_type.setEnabled(false);
                 String message = JOptionPane.showInputDialog(Heap_Panel, "Enter your Heap:");
-                if (message != null ) {
-//                    JOptionPane.showMessageDialog(Heap_Panel, "You entered: " + message);
+                if (message != null) {
                     String heapS[] = message.split(",");
-//                    for (String s : heapS)
-//                        System.out.println(s);
                     int index = 0;
                     double[] heapInput = new double[heapS.length];
                     for (String s : heapS) {
@@ -196,13 +186,13 @@ public class GUI extends JFrame {
                 String insertValue = String.valueOf(Integer.parseInt(
                         JOptionPane.showInputDialog(Heap_Panel, "Enter your index for delete:")));
                 int indexToDelete = -1;
-                if (insertValue.trim().matches("^(0|[1-9]\\d*)$")){
-                     indexToDelete = Integer.parseInt(insertValue.trim());
-                 }
+                if (insertValue.trim().matches("^(0|[1-9]\\d*)$")) {
+                    indexToDelete = Integer.parseInt(insertValue.trim());
+                }
                 if (indexToDelete >= 0 && indexToDelete < heap.heap.length) {
                     heap.HEAP_DELETE(Integer.parseInt(insertValue));
-                }
-                else System.out.println("Invalid Value, pleas provide valid one");;
+                } else System.out.println("Invalid Value, pleas provide valid one");
+                ;
             }
         });
 
@@ -239,9 +229,6 @@ public class GUI extends JFrame {
         });
 
 
-
-
-
         ///////////////////////Main Panel///////////////////////
         buttonPanel.add(Heap_Panel, "set1");
 
@@ -267,10 +254,6 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
-
-
-
 }
 
 
