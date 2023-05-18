@@ -1,15 +1,15 @@
 package App;
 
 public class Heap_MaxMin {
-    double heap[];
+    public static double[] heap;
 
     public Heap_MaxMin(double[] heap){
         this.heap = heap;
     }
 
     /**
-     * heap assume that the subTree below are ordered, and just make sure the value
-     * we give to the method will be at the right index when it's finished
+     * Heap assume that the subTree below is ordered, and just make sure the value
+     * we give to the method will be at the right index when it's finished to run
      * @param index we want to heapify
      */
     public void HEAPIFY(int index){
@@ -18,26 +18,12 @@ public class Heap_MaxMin {
             return;
 
         // Calculate the depth of the node using floor(log2(index + 1))
-        int depth = (int) (Math.floor(Math.log(index + 1) / Math.log(2)));
+        int depth = getDepth(index);
         System.out.println(">> heapify index:" + index + " at depth:" + depth);
 
         //if the depth is even
         if (depth % 2 == 0) {
-
-            int largest = Integer.MIN_VALUE;
-            if (hasLeftSon(index)){
-                 double left = getLeftSonValue(index);
-                if (left > heap[index])
-                    largest = 2*index+1;
-                else largest = index;
-            }
-
-            if (hasRightSon(index)){
-                double right = getRightSonValue(index);
-                if (right > heap[largest])
-                    largest = 2*index+2;
-            }
-
+            int largest = findLargestChild(index);
             boolean keepHeapify = false;//indicate if we need to keep heapify or not
 
             //exchange values if needed
@@ -53,29 +39,16 @@ public class Heap_MaxMin {
                 keepHeapify = true;
             }
 
-            //if needed keep to heapify
+            //if needed keep heapifying
             if (keepHeapify)
                 HEAPIFY(largest);//continue to heapify
 
             else System.out.println("--- noting to heapify ---");
         }//end of even depth
 
-        /**if the depth is ODD*/
+        //if the depth is odd
         else {
-            int smallest = Integer.MIN_VALUE;
-            if (hasLeftSon(index)){
-                double left = getLeftSonValue(index);
-                if (left < heap[index])
-                    smallest = 2*index+1;
-                else smallest = index;
-            }
-
-            if (hasRightSon(index)){
-                double right = getRightSonValue(index);
-                if (right < heap[smallest])
-                    smallest = 2*index+2;
-            }
-
+            int smallest = findSmallestChild(index);
             boolean keepHeapify = false;//indicate if we need to keep heapify or not
 
             //exchange values if needed
@@ -92,7 +65,7 @@ public class Heap_MaxMin {
                 keepHeapify = true;
             }
 
-            //if needed keep to heapify
+            //if needed keep heapifying
             if (keepHeapify)
                 HEAPIFY(smallest);//continue to heapify
 
@@ -100,6 +73,7 @@ public class Heap_MaxMin {
 
         }//end of depth odd
     }//end of Heapify
+
 
     /**
      * build heap
@@ -138,7 +112,7 @@ public class Heap_MaxMin {
 
         //heapify up
         int index = heap.length-1;
-        while (index >= 0) {
+        while (index > 0) {
             //heapify up
             index = getParent(index);
             HEAPIFY(index);
@@ -146,27 +120,30 @@ public class Heap_MaxMin {
         System.out.print("New heap: ");
         printHeap();
     }
+
+    /**
+     * delete the given index from the heap and then order the heap to match
+     * the roles of min-max heap
+     * @param indexToDelete
+     */
     public void HEAP_DELETE(int indexToDelete){
         System.out.println(">>> delete " + indexToDelete);
-        // Search for the index of the value in the heap
-        for (int i = 0; i < heap.length; i++) {
-            if (i == indexToDelete) {
-                indexToDelete = i;
-                break;
-            }
-        }
+        //validate the index to delete
+        if (indexToDelete < heap.length && indexToDelete >=0) {
 
-        // Replace the value with the last element in the heap
-        heap[indexToDelete] = heap[heap.length - 1];
-        double heapForBuild[] = new double[heap.length-1];
-        for (int i =0; i < heap.length -1; i++)
-            heapForBuild[i] = heap[i];
-        heap = heapForBuild;
-        System.out.print("Heap after delete: ");
-        printHeap();
-        HEAPIFY(indexToDelete);
-        System.out.print("Fixed heap: ");
-        printHeap();
+            // Replace the value with the last element in the heap
+            heap[indexToDelete] = heap[heap.length - 1];
+            double heapForBuild[] = new double[heap.length - 1];
+            for (int i = 0; i < heap.length - 1; i++)
+                heapForBuild[i] = heap[i];
+            heap = heapForBuild;
+            System.out.print("Heap after delete: ");
+            printHeap();
+            HEAPIFY(indexToDelete);
+            System.out.print("Fixed heap: ");
+            printHeap();
+        }
+        else System.out.println("Pls provide a valid index between 0 to " + heap.length);
     }
 
     /**Left-Son method*/
@@ -198,11 +175,22 @@ public class Heap_MaxMin {
         return -1;
     }
 
+    /**provide the depth of the given index in the heap*/
+    private int getDepth(int index){
+        if (index >= heap.length || index < 0)
+            return -1;
+        return (int) (Math.floor(Math.log(index + 1) / Math.log(2)));
+    }
+
     /**
-     * this method return the largest grandson of the given index
+     * This method return the largest grandson of the given index
      * if there isn't any index fit for that, return -1
      */
     private int checkGrandSons(int index, boolean max){
+        if (index >= heap.length || index < 0) {
+            System.out.println("invalid index pls enter valid one");
+            return -1;
+        }
         int Left_LeftSon = getLeftSonIndex(getLeftSonIndex(index));
         int Right_LeftSon = getRightSonIndex(getLeftSonIndex(index));
         int Left_RightSon = getLeftSonIndex(getRightSonIndex(index));
@@ -244,6 +232,39 @@ public class Heap_MaxMin {
         printHeap();
     }
 
+    private int findSmallestChild(int index) {
+        int smallest = Integer.MIN_VALUE;
+        if (hasLeftSon(index)) {
+            double left = getLeftSonValue(index);
+            if (left < heap[index])
+                smallest = getLeftSonIndex(index);
+            else
+                smallest = index;
+        }
+        if (hasRightSon(index)) {
+            double right = getRightSonValue(index);
+            if (right < heap[smallest])
+                smallest = getRightSonIndex(index);
+        }
+        return smallest;
+    }
+
+    private int findLargestChild(int index) {
+        int largest = Integer.MIN_VALUE;
+        if (hasLeftSon(index)) {
+            double left = getLeftSonValue(index);
+            if (left > heap[index])
+                largest = getLeftSonIndex(index);
+            else
+                largest = index;
+        }
+        if (hasRightSon(index)) {
+            double right = getRightSonValue(index);
+            if (right > heap[largest])
+                largest = getRightSonIndex(index);
+        }
+        return largest;
+    }
 
     /**
      * method for printing the heap --> will look like this: [10.0, 2.2, 5.55....]
@@ -260,18 +281,6 @@ public class Heap_MaxMin {
             }
         }
         else System.out.println("Pls provide a valid heap");
-
-//printing with the indexes
-//            //printing the heap we got from the file
-//            System.out.print("HEAP: ");
-//            System.out.print("[");
-//            for (int i1 = 0; i1 < heap.length; i1++) {
-//                if (i1 != heap.length - 1)
-//                    System.out.print("{"+i1+","+heap[i1] + "}, ");
-//                else System.out.println("{"+i1+","+heap[i1] + "}]\n ");
-//            }
-//        }
-//        else System.out.println("Pls provide a valid heap");
     }
 
 }

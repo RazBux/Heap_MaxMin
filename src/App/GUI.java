@@ -126,6 +126,12 @@ public class GUI extends JFrame {
                 radio_file.setEnabled(true);
                 radio_type.setEnabled(true);
                 build_heap_Button.setEnabled(false);
+                heap_delete_Button.setEnabled(false);
+                heap_extract_max_Button.setEnabled(false);
+                heap_extract_min_Button.setEnabled(false);
+                heap_insert_Button.setEnabled(false);
+                heap_print_Button.setEnabled(false);
+                build_heap_Button.setEnabled(false);
             }
         });
 
