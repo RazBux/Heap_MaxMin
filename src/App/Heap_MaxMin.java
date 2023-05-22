@@ -1,7 +1,10 @@
 package App;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Heap_MaxMin {
-    public static double[] heap;
+    double[] heap;
 
     public Heap_MaxMin(double[] heap){
         this.heap = heap;
@@ -283,4 +286,130 @@ public class Heap_MaxMin {
         else System.out.println("Pls provide a valid heap");
     }
 
+    //check the aliasing
+    private static void sortHeap(Heap_MaxMin heap){
+        double heapF[] = new double[heap.heap.length];
+        //copy all the object to avoid aliasing
+        for (int i =0; i< heapF.length; i++)
+            heapF[i] = heap.heap[i];
+
+        Heap_MaxMin h = new Heap_MaxMin(heapF);
+
+        double[] sortHeap = new double[heapF.length];
+        int indexToFill = heapF.length-1;
+        for (int i = 0; i<sortHeap.length; i++){
+            sortHeap[indexToFill] = h.heap[0];
+            indexToFill--;
+
+            h.HEAP_DELETE(0);
+        }
+
+        //print the sorted heap
+        System.out.print("SORTED HEAP: ");
+        System.out.print("[");
+        for (int i1 = 0; i1 < sortHeap.length; i1++) {
+            if (i1 != sortHeap.length - 1)
+                System.out.print(sortHeap[i1] + ", ");
+            else System.out.println(sortHeap[i1] + "]");
+        }
+        System.out.println("FYI the original heap remain the same\n");
+    }
+//10,54,8,5550,-80,10,0,1,2,3,4,5,6
+
+
+    //Main
+    public static void main(String[] args) throws IOException {
+        Heap_MaxMin heapMaxMin = null;
+        System.out.println("Hello and welcome to the HeapMinMax\n");
+        System.out.println("Pls insert the values of the heap you want\n" +
+                "to build as a \"MaxMin Heap\", insert like 10,2,4,-33,2....\n" +
+                "if there is comma it will ignore them");
+        System.out.println("\nYour Heap: ");
+        Scanner scanner = new Scanner(System.in);
+        String message = scanner.nextLine();
+        if (message != null) {
+            String heapS[] = message.split(",");
+            int index = 0;
+            double[] heapInput = new double[heapS.length];
+            for (String s : heapS) {
+                //validate each value in the split string with regular expression
+                if (s.trim().matches("^-?\\d+(\\.\\d+)?$")) {
+                    heapInput[index] = Double.parseDouble(s.trim());
+                    index++;
+                }
+            }
+            heapMaxMin = new Heap_MaxMin(heapInput);
+            heapMaxMin.BUILD_HEAP();
+        }
+
+        int number = -1;
+        Scanner scan = new Scanner(System.in);
+        while (number != 0) {
+            number = printMenu();
+            switch (number) {
+                //Exit
+                case 0:
+                    break;
+                //Insert
+                case 1: {
+                    System.out.println("Pls choose value to Insert: ");
+                    double insertValue = scan.nextDouble();
+                    heapMaxMin.HEAP_INSERT(insertValue);
+                    break;
+                }
+                //Delete
+                case 2: {
+                    System.out.println("Pls choose index to Delete: ");
+                    int indexToDelete = scan.nextInt();
+                    if (indexToDelete >= 0 && indexToDelete < heapMaxMin.heap.length) {
+                        heapMaxMin.HEAP_DELETE(indexToDelete);
+                    } else System.out.println("Invalid Value, pleas provide valid one");
+                    break;
+                }
+                //Max
+                case 3: {
+                    heapMaxMin.HEAP_EXTRACT_MAX();
+                    break;
+                }
+                //Min
+                case 4: {
+                    heapMaxMin.HEAP_EXTRACT_MIN();
+                    break;
+                }
+                //Print heap
+                case 5: {
+                    System.out.println("Print Heap");
+                    heapMaxMin.printHeap();
+                    break;
+                }
+                //Print heap
+                case 6: {
+                    sortHeap(heapMaxMin);
+                    break;
+                }
+                default: {
+                    System.out.println(">>> invalid option pls choose valid one...");
+                }
+            }
+        }
+        System.out.println("you choose to Exit");
+    }
+
+
+    public static int printMenu(){
+        System.out.println();
+        System.out.println("0. Exit");
+        System.out.println("1. Insert value");
+        System.out.println("2. Delete index");
+        System.out.println("3. Extract max");
+        System.out.println("4. Extract min");
+        System.out.println("5. Print heap");
+        System.out.println("6. Sort heap");
+
+
+        System.out.println("Pls enter the number you want to use: ");
+        Scanner scanner = new Scanner(System.in);
+        int number = scanner.nextInt();
+        return number;
+    }
 }
