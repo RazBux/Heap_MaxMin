@@ -149,6 +149,60 @@ public class Heap_MaxMin {
         else System.out.println("Pls provide a valid index between 0 to " + heap.length);
     }
 
+    /**
+     * method for printing the heap --> will look like this: [10.0, 2.2, 5.55....]
+     */
+    public void printHeap(){
+        if (heap != null && heap.length > 0) {
+            //printing the heap we got from the file
+            System.out.print("HEAP: ");
+            System.out.print("[");
+            for (int i1 = 0; i1 < heap.length; i1++) {
+                if (i1 != heap.length - 1)
+                    System.out.print(heap[i1] + ", ");
+                else System.out.println(heap[i1] + "]\n");
+            }
+        }
+        else System.out.println("Pls provide a valid heap");
+    }
+
+    /**
+     * SortHeap will sort the heap to an array of double from the smallest to largest
+     * @return the sorted double array
+     */
+    public double[] sortHeap(){
+        double heapF[] = new double[heap.length];
+        //copy all the object to avoid aliasing
+        for (int i =0; i< heapF.length; i++)
+            heapF[i] = heap[i];
+
+        Heap_MaxMin h = new Heap_MaxMin(heapF);
+
+        double[] sortHeap = new double[heapF.length];
+        int indexToFill = heapF.length-1;
+        for (int i = 0; i<sortHeap.length; i++){
+            sortHeap[indexToFill] = h.heap[0];
+            indexToFill--;
+
+            h.HEAP_DELETE(0);
+        }
+
+        //print the sorted heap
+        System.out.print("SORTED HEAP: ");
+        System.out.print("[");
+        for (int i1 = 0; i1 < sortHeap.length; i1++) {
+            if (i1 != sortHeap.length - 1)
+                System.out.print(sortHeap[i1] + ", ");
+            else System.out.println(sortHeap[i1] + "]");
+        }
+        System.out.println("FYI the original heap remain the same\n");
+
+        return sortHeap;
+    }
+/*
+10,54,8,5550,-80,10,0,1,2,3,4,5,6
+*/
+
     /**Left-Son method*/
     private boolean hasLeftSon(int index){
         return (2*index+1 < this.heap.length);
@@ -269,53 +323,6 @@ public class Heap_MaxMin {
         return largest;
     }
 
-    /**
-     * method for printing the heap --> will look like this: [10.0, 2.2, 5.55....]
-     */
-    public void printHeap(){
-        if (heap != null && heap.length > 0) {
-            //printing the heap we got from the file
-            System.out.print("HEAP: ");
-            System.out.print("[");
-            for (int i1 = 0; i1 < heap.length; i1++) {
-                if (i1 != heap.length - 1)
-                    System.out.print(heap[i1] + ", ");
-                else System.out.println(heap[i1] + "]\n");
-            }
-        }
-        else System.out.println("Pls provide a valid heap");
-    }
-
-    //check the aliasing
-    private static void sortHeap(Heap_MaxMin heap){
-        double heapF[] = new double[heap.heap.length];
-        //copy all the object to avoid aliasing
-        for (int i =0; i< heapF.length; i++)
-            heapF[i] = heap.heap[i];
-
-        Heap_MaxMin h = new Heap_MaxMin(heapF);
-
-        double[] sortHeap = new double[heapF.length];
-        int indexToFill = heapF.length-1;
-        for (int i = 0; i<sortHeap.length; i++){
-            sortHeap[indexToFill] = h.heap[0];
-            indexToFill--;
-
-            h.HEAP_DELETE(0);
-        }
-
-        //print the sorted heap
-        System.out.print("SORTED HEAP: ");
-        System.out.print("[");
-        for (int i1 = 0; i1 < sortHeap.length; i1++) {
-            if (i1 != sortHeap.length - 1)
-                System.out.print(sortHeap[i1] + ", ");
-            else System.out.println(sortHeap[i1] + "]");
-        }
-        System.out.println("FYI the original heap remain the same\n");
-    }
-//10,54,8,5550,-80,10,0,1,2,3,4,5,6
-
 
     //Main
     public static void main(String[] args) throws IOException {
@@ -384,7 +391,7 @@ public class Heap_MaxMin {
                 }
                 //Print heap
                 case 6: {
-                    sortHeap(heapMaxMin);
+                    heapMaxMin.sortHeap();
                     break;
                 }
                 default: {
