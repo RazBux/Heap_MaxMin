@@ -199,9 +199,7 @@ public class Heap_MaxMin {
 
         return sortHeap;
     }
-/*
-10,54,8,5550,-80,10,0,1,2,3,4,5,6
-*/
+
 
     /**Left-Son method*/
     private boolean hasLeftSon(int index){
