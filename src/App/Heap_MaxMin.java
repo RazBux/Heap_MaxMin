@@ -22,7 +22,7 @@ public class Heap_MaxMin {
 
         // Calculate the depth of the node using floor(log2(index + 1))
         int depth = getDepth(index);
-        System.out.println(">> heapify index:" + index + " at depth:" + depth);
+//        System.out.println(">> heapify index:" + index + " at depth:" + depth);
 
         //if the depth is even
         if (depth % 2 == 0) {
@@ -46,7 +46,7 @@ public class Heap_MaxMin {
             if (keepHeapify)
                 HEAPIFY(largest);//continue to heapify
 
-            else System.out.println("--- noting to heapify ---");
+//            else System.out.println("--- noting to heapify ---");
         }//end of even depth
 
         //if the depth is odd
@@ -72,7 +72,7 @@ public class Heap_MaxMin {
             if (keepHeapify)
                 HEAPIFY(smallest);//continue to heapify
 
-            else System.out.println("--- noting to heapify ---");
+//            else System.out.println("--- noting to heapify ---");
 
         }//end of depth odd
     }//end of Heapify
@@ -129,8 +129,9 @@ public class Heap_MaxMin {
      * the roles of min-max heap
      * @param indexToDelete
      */
-    public void HEAP_DELETE(int indexToDelete){
-        System.out.println(">>> delete " + indexToDelete);
+    public void HEAP_DELETE(int indexToDelete,boolean sort){
+        if (!sort)
+            System.out.println(">>> delete index: " + indexToDelete);
         //validate the index to delete
         if (indexToDelete < heap.length && indexToDelete >=0) {
 
@@ -140,11 +141,11 @@ public class Heap_MaxMin {
             for (int i = 0; i < heap.length - 1; i++)
                 heapForBuild[i] = heap[i];
             heap = heapForBuild;
-            System.out.print("Heap after delete: ");
-            printHeap();
             HEAPIFY(indexToDelete);
-            System.out.print("Fixed heap: ");
-            printHeap();
+            if (!sort) {
+                System.out.print("Fixed heap: ");
+                printHeap();
+            }
         }
         else System.out.println("Pls provide a valid index between 0 to " + heap.length);
     }
@@ -160,7 +161,7 @@ public class Heap_MaxMin {
             for (int i1 = 0; i1 < heap.length; i1++) {
                 if (i1 != heap.length - 1)
                     System.out.print(heap[i1] + ", ");
-                else System.out.println(heap[i1] + "]\n");
+                else System.out.println(heap[i1] + "]");
             }
         }
         else System.out.println("Pls provide a valid heap");
@@ -184,7 +185,7 @@ public class Heap_MaxMin {
             sortHeap[indexToFill] = h.heap[0];
             indexToFill--;
 
-            h.HEAP_DELETE(0);
+            h.HEAP_DELETE(0,true);
         }
 
         //print the sorted heap
@@ -195,7 +196,7 @@ public class Heap_MaxMin {
                 System.out.print(sortHeap[i1] + ", ");
             else System.out.println(sortHeap[i1] + "]");
         }
-        System.out.println("FYI the original heap remain the same\n");
+        System.out.println("FYI the original heap remain the same");
 
         return sortHeap;
     }
@@ -283,8 +284,8 @@ public class Heap_MaxMin {
         double temp = heap[index1];
         heap[index1] = heap[index2];
         heap[index2] = temp;
-        System.out.println(heap[index1]+" <--> " + heap[index2]);
-        printHeap();
+//        System.out.println(heap[index1]+" <--> " + heap[index2]);
+//        printHeap();
     }
 
     private int findSmallestChild(int index) {
@@ -367,7 +368,7 @@ public class Heap_MaxMin {
                     System.out.println("Pls choose index to Delete: ");
                     int indexToDelete = scan.nextInt();
                     if (indexToDelete >= 0 && indexToDelete < heapMaxMin.heap.length) {
-                        heapMaxMin.HEAP_DELETE(indexToDelete);
+                        heapMaxMin.HEAP_DELETE(indexToDelete,false);
                     } else System.out.println("Invalid Value, pleas provide valid one");
                     break;
                 }
