@@ -11,15 +11,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation
 To install Heap_MinMax, follow these steps:
-
-1. Clone the repository to your local machine:
-      git clone https://github.com/yourusername/Heap_MinMax.git
-
-2. Navigate to the project directory:
-     cd Heap_MinMax
-
-3. Compile the Java program:
-     javac Heap_MaxMin.java
-
-4. Run the compiled program:
-     java Heap_MaxMin
+1. Clone the repository to your local machine: git clone https://github.com/yourusername/Heap_MinMax.git
+2. Navigate to the project directory: cd Heap_MinMax
+3. Compile the Java program: javac Heap_MaxMin.java
+4. Run the compiled program: java Heap_MaxMin
